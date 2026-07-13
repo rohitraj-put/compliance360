@@ -1,0 +1,28 @@
+{
+  "name": "Compliance360-nextjs",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "db:migrate": "node db/migrate.js",
+    "db:seed": "node db/seedDemoData.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.5",
+    "jose": "^5.9.6",
+    "mysql2": "^3.11.3",
+    "next": "14.2.35",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "uuid": "^11.0.5"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">=18.17"
+  }
+}

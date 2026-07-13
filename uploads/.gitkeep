@@ -1,0 +1,2 @@
+Uploaded documents and profile photos are written here at runtime and served via
+GET /api/uploads/[filename]. Ignored by git except for this placeholder.
