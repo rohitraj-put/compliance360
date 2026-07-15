@@ -63,7 +63,7 @@ export default function ConsultantPortal() {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search Clients by Name or Industry"
-            style={{ width: '100%', maxWidth: 320, padding: '0.75rem 1rem', border: '1px solid #d1d5db', borderRadius: 8 }}
+            style={{ width: '100%', maxWidth: 320, background: 'var(--background)', padding: '0.75rem 1rem', border: '1px solid var(--border-strong)', borderRadius: 8 }}
           />
         </div>
 

@@ -95,7 +95,7 @@ export default function Compliance() {
           </div></div>
         ) : (
           <div className="panel">
-            <div className="panel-body" style={{ padding: 0 }}>
+            <div className="panel-body" style={{ padding: 0,textTransform: 'capitalize' }}>
               <table className="table">
                 <thead>
                   <tr>
