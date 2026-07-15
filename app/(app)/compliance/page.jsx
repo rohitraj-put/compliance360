@@ -8,6 +8,9 @@ import StampBadge, { StatusPill } from '@/components/StampBadge'
 import { useAppData } from '@/context/DataContext'
 import { formatDate } from '@/lib/date'
 import { IconPlus } from '@/components/Icons'
+import { FaEdit } from "react-icons/fa";
+import { FaTrash } from "react-icons/fa";
+import Loading from '@/components/Loading'
 
 const BLANK = { id: '', company_id: '', compliance_type_id: '', issue_date: '', expiry_date: '', notes: '' }
 
@@ -79,7 +82,7 @@ export default function Compliance() {
         </div>
 
         {loading ? (
-          <div className="empty-state">Loading records…</div>
+          <div className="empty-state"><Loading message="Loading records…" /></div>
         ) : data.companies.length === 0 ? (
           <div className="panel"><div className="empty-state">
             <div className="empty-state-title">Add a company first.</div>
@@ -115,8 +118,12 @@ export default function Compliance() {
                       <td className="mono">{formatDate(r.expiry_date)}</td>
                       <td><StatusPill status={r.status} /></td>
                       <td style={{ textAlign: 'right' }}>
-                        <button className="btn-ghost" onClick={() => openEdit(r)}>Edit</button>
-                        <button className="btn-ghost" onClick={() => setPendingDelete(r)}>Delete</button>
+                        <button className="btn-ghost btn-ghost-edit" onClick={() => openEdit(r)}>
+                          <FaEdit />
+                        </button>
+                        <button className="btn-ghost btn-ghost-delete" onClick={() => setPendingDelete(r)}>
+                          <FaTrash />
+                        </button>
                       </td>
                     </tr>
                   ))}

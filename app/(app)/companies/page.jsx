@@ -6,8 +6,11 @@ import Modal from '@/components/Modal'
 import ConfirmDialog from '@/components/ConfirmDialog'
 import { useAppData } from '@/context/DataContext'
 import { IconPlus } from '@/components/Icons'
+import { FaEdit } from "react-icons/fa";
+import { FaTrash } from "react-icons/fa";
+import Loading from '@/components/Loading'
 
-const BLANK = { id: '', company_name: '', gst_number: '', industry: '', state: '', employee_count: '' }
+const BLANK = { id: '', company_name: '',contact_number: '', gst_number: '', industry: '', state: '', employee_count: '' }
 
 export default function Companies() {
   const { data, scopedRecords, addOrUpdateCompany, deleteCompany, loading } = useAppData()
@@ -59,7 +62,7 @@ export default function Companies() {
         <p className="section-intro">Every client entity your firm manages, with its filing footprint at a glance.</p>
 
         {loading ? (
-          <div className="empty-state">Loading companies…</div>
+          <div className="empty-state"><Loading message="Loading companies…" /></div>
         ) : data.companies.length === 0 ? (
           <div className="panel"><div className="empty-state">
             <div className="empty-state-title">No companies yet.</div>
@@ -73,6 +76,7 @@ export default function Companies() {
                   <tr>
                     <th>Company</th>
                     <th>GSTIN</th>
+                    <th>Contact Number</th>
                     <th>Industry</th>
                     <th>State</th>
                     <th>Employees</th>
@@ -85,13 +89,18 @@ export default function Companies() {
                     <tr key={c.id}>
                       <td><strong>{c.company_name}</strong></td>
                       <td className="mono">{c.gst_number}</td>
+                      <td>{c.contact_number}</td>
                       <td>{c.industry}</td>
                       <td>{c.state}</td>
                       <td>{c.employee_count}</td>
                       <td>{licenseCount(c.id)}</td>
                       <td style={{ textAlign: 'right' }}>
-                        <button className="btn-ghost" onClick={() => openEdit(c)}>Edit</button>
-                        <button className="btn-ghost" onClick={() => setPendingDelete(c)}>Remove</button>
+                        <button className="btn-ghost btn-ghost-edit" onClick={() => openEdit(c)}>
+                          <FaEdit />
+                        </button>
+                        <button className="btn-ghost btn-ghost-delete" onClick={() => setPendingDelete(c)}>
+                          <FaTrash />
+                        </button>
                       </td>
                     </tr>
                   ))}
@@ -118,6 +127,10 @@ export default function Companies() {
           <div className="field">
             <label>Company name</label>
             <input value={form.company_name} onChange={(e) => setForm({ ...form, company_name: e.target.value })} placeholder="e.g. Sanskriti Textiles Pvt Ltd" />
+          </div>
+          <div className="field">
+            <label>Contact Number</label>
+            <input value={form.contact_number || ''} onChange={(e) => setForm({ ...form, contact_number: e.target.value })} placeholder="123-456-7890" />
           </div>
           <div className="field">
             <label>GSTIN</label>

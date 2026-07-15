@@ -82,7 +82,7 @@ export function Donut({ segments, size = 150, strokeWidth = 22 }) {
         {segments.map((s) => (
           <div key={s.label} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12.5, color: 'var(--text-muted)' }}>
             <span style={{ width: 10, height: 10, borderRadius: 3, background: s.color, display: 'inline-block' }} />
-            {s.label} — <strong style={{ color: '#22283A' }}>{s.value}</strong>
+            {s.label} — <strong style={{ color: 'var(--text)' }}>{s.value}</strong>
           </div>
         ))}
       </div>

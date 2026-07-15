@@ -1,14 +1,16 @@
 'use client'
 
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Topbar from '@/components/Topbar'
 import StatCard from '@/components/StatCard'
 import { useAppData } from '@/context/DataContext'
+import Loading from '@/components/Loading'
 
 export default function ConsultantPortal() {
   const { data, setCurrentCompanyId, loading } = useAppData()
   const router = useRouter()
+  const [searchTerm, setSearchTerm] = useState('')
 
   const rows = useMemo(() => {
     return data.companies.map((c) => {
@@ -24,7 +26,18 @@ export default function ConsultantPortal() {
     })
   }, [data])
 
-  const totals = rows.reduce(
+  const filteredRows = useMemo(() => {
+    const term = searchTerm.trim().toLowerCase()
+    if (!term) return rows
+
+    return rows.filter((r) => {
+      const companyName = r.company.company_name?.toLowerCase() ?? ''
+      const industry = r.company.industry?.toLowerCase() ?? ''
+      return companyName.includes(term) || industry.includes(term)
+    })
+  }, [rows, searchTerm])
+
+  const totals = filteredRows.reduce(
     (acc, r) => ({
       clients: acc.clients + 1,
       expiring: acc.expiring + r.expiring,
@@ -44,6 +57,16 @@ export default function ConsultantPortal() {
       <div className="content">
         <p className="section-intro">Every client under your firm&rsquo;s care, ranked by how urgently they need you.</p>
 
+        <div style={{ marginBottom: '1rem' }}>
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Search Clients by Name or Industry"
+            style={{ width: '100%', maxWidth: 320, padding: '0.75rem 1rem', border: '1px solid #d1d5db', borderRadius: 8 }}
+          />
+        </div>
+
         <div className="stat-grid">
           <StatCard label="Total Clients" value={totals.clients} />
           <StatCard label="Expiring Across Portfolio" value={totals.expiring} accent="amber" />
@@ -51,11 +74,13 @@ export default function ConsultantPortal() {
         </div>
 
         {loading ? (
-          <div className="empty-state">Loading portfolio…</div>
-        ) : rows.length === 0 ? (
+          <div className="empty-state"><Loading message="Loading portfolio…" /></div>
+        ) : filteredRows.length === 0 ? (
           <div className="panel"><div className="empty-state">
-            <div className="empty-state-title">No clients yet.</div>
-            Add companies to see them ranked here by urgency.
+            <div className="empty-state-title">
+              {searchTerm ? 'No matching clients found.' : 'No clients yet.'}
+            </div>
+            {searchTerm ? 'Try a different search term.' : 'Add companies to see them ranked here by urgency.'}
           </div></div>
         ) : (
           <div className="panel">
@@ -73,7 +98,7 @@ export default function ConsultantPortal() {
                   </tr>
                 </thead>
                 <tbody>
-                  {rows
+                  {filteredRows
                     .slice()
                     .sort((a, b) => (b.overdue - a.overdue) || (b.expiring - a.expiring))
                     .map((r) => (

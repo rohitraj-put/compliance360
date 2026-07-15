@@ -22,15 +22,15 @@ export const GET = withErrorHandling(async (request) => {
 
 export const POST = withErrorHandling(async (request) => {
   const user = getUser(request)
-  const { company_name, gst_number, industry, state, employee_count } = await request.json()
+  const { company_name, gst_number, contact_number, industry, state, employee_count } = await request.json()
 
   if (!company_name?.trim()) throw ApiError.badRequest('Company name is required.')
 
   const id = uuidv4()
   await pool.query(
-    `INSERT INTO companies (id, owner_user_id, company_name, gst_number, industry, state, employee_count)
-     VALUES (?, ?, ?, ?, ?, ?, ?)`,
-    [id, user.id, company_name.trim(), gst_number || null, industry || null, state || null, Number(employee_count) || 0]
+    `INSERT INTO companies (id, owner_user_id, company_name, gst_number, contact_number, industry, state, employee_count)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+    [id, user.id, company_name.trim(), gst_number || null, contact_number || null, industry || null, state || null, Number(employee_count) || 0]
   )
 
   const company = await getOwnedCompanyOrFail(id, user.id)

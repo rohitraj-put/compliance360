@@ -5,6 +5,7 @@ import Topbar from '@/components/Topbar'
 import { useAppData } from '@/context/DataContext'
 import { formatDate, daysUntil } from '@/lib/date'
 import { StatusPill } from '@/components/StampBadge'
+import Loading from '@/components/Loading'
 
 function barColor(days) {
   if (days < 0) return '#C1443C'
@@ -33,7 +34,7 @@ export default function CalendarPage() {
         <div className="panel">
           <div className="panel-body">
             {loading ? (
-              <div className="empty-state">Loading renewals…</div>
+              <div className="empty-state"><Loading message="Loading renewals…" /></div>
             ) : sorted.length === 0 ? (
               <div className="empty-state">No renewals scheduled.</div>
             ) : (

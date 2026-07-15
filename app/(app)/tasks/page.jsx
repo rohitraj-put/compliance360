@@ -7,6 +7,8 @@ import ConfirmDialog from '@/components/ConfirmDialog'
 import { useAppData } from '@/context/DataContext'
 import { formatDate } from '@/lib/date'
 import { IconPlus } from '@/components/Icons'
+import { FaTrash } from "react-icons/fa";
+import Loading from '@/components/Loading'
 
 const COLUMNS = ['Open', 'In Progress', 'Completed']
 const BLANK = { id: '', title: '', company_id: '', assigned_to: 'Consultant', due_date: '', status: 'Open' }
@@ -65,7 +67,7 @@ export default function Tasks() {
         <p className="section-intro">Move a task across the board as filings progress from open to complete.</p>
 
         {loading ? (
-          <div className="empty-state">Loading tasks…</div>
+          <div className="empty-state"><Loading message="Loading tasks…"/></div>
         ) : (
           <div className="kanban">
             {COLUMNS.map((col) => {
@@ -86,7 +88,9 @@ export default function Tasks() {
                             Move to {c}
                           </button>
                         ))}
-                        <button className="btn-ghost" onClick={() => setPendingDelete(t)}>Delete</button>
+                        <button className="btn-ghost btn-ghost-delete" onClick={() => setPendingDelete(t)}>
+                          <FaTrash />
+                        </button>
                       </div>
                     </div>
                   ))}

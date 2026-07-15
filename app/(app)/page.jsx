@@ -7,6 +7,7 @@ import { useAppData } from '@/context/DataContext'
 import { Donut, BarList, COLORS } from '@/components/charts/SimpleCharts'
 import { formatDate } from '@/lib/date'
 import { StatusPill } from '@/components/StampBadge'
+import Loading from '@/components/Loading'
 
 export default function Dashboard() {
   const { scopedRecords, scopedTasks, companyName, complianceTypeName, loading } = useAppData()
@@ -33,7 +34,7 @@ export default function Dashboard() {
       const name = complianceTypeName(r.compliance_type_id)
       map[name] = (map[name] || 0) + 1
     })
-    return Object.entries(map).map(([label, value]) => ({ label, value, color: COLORS.navy }))
+    return Object.entries(map).map(([label, value]) => ({ label, value, color: 'var(--text)' }))
   }, [scopedRecords, complianceTypeName])
 
   const upcoming = useMemo(
@@ -53,7 +54,7 @@ export default function Dashboard() {
         </p>
 
         {loading ? (
-          <div className="empty-state">Loading your register…</div>
+          <div className="empty-state"><Loading message="Loading your register…" /></div>
         ) : (
           <>
             <div className="stat-grid">

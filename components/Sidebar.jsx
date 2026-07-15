@@ -11,6 +11,7 @@ import Avatar from './Avatar'
 import EditProfileModal from './EditProfileModal'
 import ConfirmDialog from './ConfirmDialog'
 import { useAuth } from '@/context/AuthContext'
+import { FaCode } from "react-icons/fa6";
 
 const NAV = [
   { to: '/', label: 'Dashboard', icon: IconDashboard, end: true },
@@ -70,6 +71,16 @@ export default function Sidebar() {
           <IconLogout />
           <span className="label">Log Out</span>
         </button>
+        <button className="sidebar-logout" title="App Version" disabled>
+          <FaCode />
+          <span className="label">v {process.env.NEXT_PUBLIC_APP_VERSION || '?.?.?'}</span>
+        </button>
+        <span className="sidebar-footer">
+          <span className="sidebar-footer-text">[Crafted with <span>❤</span> and without lots of ☕ made by </span>
+          <a href="https://rohitrajputweb.netlify.app/" target="_blank" rel="noopener noreferrer" className="sidebar-footer-link">
+            Rohit Rajput]
+          </a>    
+        </span>
       </div>
 
       {editOpen && <EditProfileModal onClose={() => setEditOpen(false)} />}

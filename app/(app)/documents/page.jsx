@@ -7,6 +7,8 @@ import { useAppData } from '@/context/DataContext'
 import { apiGet, apiPost, apiDelete } from '@/lib/apiClient'
 import { formatDate } from '@/lib/date'
 import { IconFile, IconPlus } from '@/components/Icons'
+import { FaEdit, FaEye, FaDownload } from "react-icons/fa";
+import Loading from '@/components/Loading'
 
 export default function Documents() {
   const { scopedRecords, companyName, complianceTypeName, loading } = useAppData()
@@ -64,6 +66,15 @@ export default function Documents() {
     }
   }
 
+  const handleDownload = (filePath, fileName) => {
+    const link = document.createElement('a')
+    link.href = filePath
+    link.download = fileName || ''
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+
   const confirmDelete = async () => {
     try {
       await apiDelete(`/api/documents/${pendingDelete.id}`)
@@ -85,7 +96,7 @@ export default function Documents() {
             <div className="panel-header"><div className="panel-title">Folders</div></div>
             <div className="panel-body folder-tree">
               {loading ? (
-                <div className="empty-state">Loading…</div>
+                <div className="empty-state"><Loading message="Loading folders…" /></div>
               ) : Object.entries(folders).length === 0 ? (
                 <div className="empty-state">No compliance records in scope.</div>
               ) : (
@@ -145,11 +156,22 @@ export default function Documents() {
                       <a href={d.file_path} target="_blank" rel="noreferrer" style={{ fontWeight: 600, fontSize: 13.5, color: 'var(--text)', textDecoration: 'none' }}>
                         {d.file_name}
                       </a>
-                      <div className="mono" style={{ fontSize: 11.5 }}>
+                      <div className="mono" style={{ fontSize: 10 }}>
                         v{d.version} · {d.size_kb} KB · uploaded {formatDate(d.uploaded_on)}
                       </div>
                     </div>
-                    <button className="btn-ghost" onClick={() => setPendingDelete(d)}>Remove</button>
+                    <div className="doc-actions" style={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                      <button className="btn-ghost btn-ghost-view" onClick={() => window.open(d.file_path, '_blank')}>
+                        <FaEye />
+                      </button>
+                      <button className="btn-ghost btn-ghost-download" onClick={() => handleDownload(d.file_path, d.file_name)}>
+                        <FaDownload />
+                      </button>
+                      <button className="btn-ghost btn-ghost-edit" onClick={() => setPendingDelete(d)}>
+                        <FaEdit />
+                      </button>
+                    </div>
+
                   </div>
                 ))
               )}
